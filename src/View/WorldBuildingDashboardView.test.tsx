@@ -29,14 +29,12 @@ jest.mock(
 );
 
 import { WorkspaceLeaf } from "obsidian";
-import { WorldBuildingDashboardView } from "/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/View/WorldBuildingDashboardView";
-import { DataviewUtils } from "/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Utils/DataviewUtils";
-import { AddEntityModal } from "/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Modal/AddEntityModal";
-import { EntityFactory } from "/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Utils/EntityFactory";
+import { WorldBuildingDashboardView } from "./WorldBuildingDashboardView";
+import { DataviewUtils } from "../Utils/DataviewUtils";
+import { AddEntityModal } from "../Modal/AddEntityModal";
+import { EntityFactory } from "../Utils/EntityFactory";
 
-jest.mock(
-	"/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Utils/DataviewUtils",
-);
+jest.mock("../Utils/DataviewUtils");
 
 jest.mock("obsidian-dataview", () => ({
 	getAPI: jest.fn().mockReturnValue({
@@ -44,20 +42,15 @@ jest.mock("obsidian-dataview", () => ({
 	}),
 }));
 
-jest.mock(
-	"/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Utils/EntityFactory",
-);
+jest.mock("../Utils/EntityFactory");
 
 // Mock the AddEntityModal
-jest.mock(
-	"/Users/dean/Code/Unnamed Story Idea/.obsidian/plugins/codenamestory/src/Modal/AddEntityModal",
-	() => ({
-		AddEntityModal: class {
-			constructor() {}
-			open() {}
-		},
-	}),
-);
+jest.mock("../Modal/AddEntityModal", () => ({
+	AddEntityModal: class {
+		constructor() {}
+		open() {}
+	},
+}));
 
 // Mock the getAPI function from obsidian-dataview
 jest.mock("obsidian-dataview", () => ({
