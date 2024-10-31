@@ -11,6 +11,10 @@ import { AppContext } from "../../main";
 
 export const VIEW_TYPE_DASHBOARD = "world-building-dashboard";
 
+interface WorldBuildingDashboardViewProps {
+	leaf: WorkspaceLeaf;
+}
+
 export class WorldBuildingDashboardView extends ItemView {
 	root: Root | null = null;
 	dataviewAPI: DataviewApi | null = null;
