@@ -24,3 +24,23 @@ data.json
 .hotreload
 
 .conductor/
+
+coverage
+
+# Exclude the build directory
+build
+
+# Exclude the dist directory
+dist
+
+# Exclude the .yarn directory
+.yarn
+
+# Exclude the .yarnrc.yml file
+.yarnrc.yml
+
+# Exclude the .yarn-integrity file
+.yarn-integrity
+
+# Exclude the .eslintcache file
+.eslintcache
