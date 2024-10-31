@@ -123,4 +123,6 @@ export class Race extends CompositeEntity implements ISubject, IObserver {
 				<!-- Add more sections as needed -->
 				`;
 	}
+
+	registerObserver(observer: IObserver): void {}
 }
