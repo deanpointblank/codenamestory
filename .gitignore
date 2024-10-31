@@ -44,8 +44,8 @@ dist
 
 # Exclude the .eslintcache file
 .eslintcache
-!/.hotreload
 .hotreload
 
 .cache
 cache.db
+/src/.cache/
