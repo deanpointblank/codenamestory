@@ -1,8 +1,8 @@
 # vscode
 .vscode 
+*.iml
 
 # Intellij
-*.iml
 .idea
 
 # npm
@@ -20,3 +20,7 @@ data.json
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
+
+.hotreload
+
+.conductor/
