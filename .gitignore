@@ -44,3 +44,4 @@ dist
 
 # Exclude the .eslintcache file
 .eslintcache
+!/.hotreload
