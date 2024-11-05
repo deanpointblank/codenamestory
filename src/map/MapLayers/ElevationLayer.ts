@@ -1,41 +1,9 @@
 import { MapLayer, MapPoint } from "./../mapTypes";
 import { Delaunay } from "d3-delaunay";
 
-interface ElevationLayerConfig {
-	colorMap?: Record<number, string>;
-}
-
 export class ElevationLayer implements MapLayer {
 	id = "elevation";
 	isVisible = true;
-	private colorMap: Record<number, string> = {
-		0.2: "#006994", // Deep water
-		0.3: "#0099CC", // Shallow water
-		0.4: "#A3E0D8", // Coast
-		0.5: "#90EE90", // Lowlands
-		0.7: "#228B22", // Hills
-		0.85: "#8B4513", // Mountains
-		1: "#FFFFFF", // Snow caps
-	};
-
-	configure(config: ElevationLayerConfig) {
-		if (config.colorMap) {
-			this.colorMap = config.colorMap;
-		}
-	}
-
-	private getElevationColor(elevation: number): string {
-		const thresholds = Object.keys(this.colorMap)
-			.map(Number)
-			.sort((a, b) => a - b);
-
-		for (const threshold of thresholds) {
-			if (elevation < threshold) {
-				return this.colorMap[threshold];
-			}
-		}
-		return this.colorMap[1]; // Default to the highest elevation color
-	}
 
 	render(
 		ctx: CanvasRenderingContext2D,
@@ -43,6 +11,10 @@ export class ElevationLayer implements MapLayer {
 		width: number,
 		height: number,
 	): void {
+		console.log(
+			"Sample elevations:",
+			points.slice(0, 5).map((p) => p.elevation),
+		);
 		const delaunay = Delaunay.from(
 			points.map((p) => [p.x, p.y]),
 			(p) => p[0],
@@ -60,9 +32,45 @@ export class ElevationLayer implements MapLayer {
 				}
 				ctx.closePath();
 
-				ctx.fillStyle = this.getElevationColor(point.elevation);
+				// Explicitly defined elevation thresholds
+				const elevation = point.elevation;
+				if (elevation < 0.3) {
+					ctx.fillStyle = "#1a237e"; // Deep water - darker blue
+				} else if (elevation < 0.5) {
+					ctx.fillStyle = "#42a5f5"; // Shallow water - medium blue
+				} else if (elevation < 0.7) {
+					ctx.fillStyle = "#90e0ef"; // Coastal areas - light blue
+				} else if (elevation < 0.8) {
+					ctx.fillStyle = "#2d6a4f"; // Lowlands - green
+				} else if (elevation < 0.9) {
+					ctx.fillStyle = "#81c784"; // Hills - darker green
+				} else {
+					ctx.fillStyle = "#33691e"; // Mountains - darkest green
+				}
 				ctx.fill();
+
+				// Optional: Add cell borders for better visibility
 			}
+		});
+	}
+
+	renderLegend(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+		const legendItems = [
+			{ color: "#03045e", label: "Deep Ocean" },
+			{ color: "#0077b6", label: "Shallow Water" },
+			{ color: "#90e0ef", label: "Coastal Waters" },
+			{ color: "#2d6a4f", label: "Lowlands" },
+			{ color: "#1b4332", label: "Hills" },
+			{ color: "#081c15", label: "Mountains" },
+		];
+
+		ctx.font = "12px Arial";
+		legendItems.forEach((item, i) => {
+			const yPos = y + i * 20;
+			ctx.fillStyle = item.color;
+			ctx.fillRect(x, yPos, 15, 15);
+			ctx.fillStyle = "#000";
+			ctx.fillText(item.label, x + 20, yPos + 12);
 		});
 	}
 }

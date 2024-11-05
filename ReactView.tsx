@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "./main";
-import WorldList from "@/src/Entities/World/WorldList";
+import WorldList from "./src/Entities/World/WorldList";
 
 export const ReactView: React.FC = () => {
 	const obsidianApp = useContext(AppContext);

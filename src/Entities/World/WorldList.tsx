@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Plus, Globe } from "lucide-react";
 import { getAPI } from "obsidian-dataview";
-import { AppContext } from "@/main";
-import { AddEntityModal } from "@/src/Modal/AddEntityModal";
-import { EntityFactory } from "@/src/Utils/EntityFactory";
+import { AppContext } from "../../../main";
+import { AddEntityModal } from "../../Modal/AddEntityModal";
+import { EntityFactory } from "../../Utils/EntityFactory";
 import { TFile } from "obsidian";
-import { MapGenerator } from "@/src/map/MapGenerator";
+import { MapGenerator } from "../../map/MapGenerator";
+import { LayerManagerProvider } from "../../map/MapLayers/LayerManager";
 
 interface World {
 	name: string;
@@ -128,7 +129,9 @@ const WorldList: React.FC = () => {
 
 			<div className="border-t border-b py-6 my-6">
 				<h3 className="text-xl font-bold mb-4">Map Preview</h3>
-				<MapGenerator width={600} height={400} numPoints={500} />
+				<LayerManagerProvider>
+					<MapGenerator width={600} height={400} numPoints={500} />
+				</LayerManagerProvider>
 			</div>
 
 			{worlds.length === 0 ? (

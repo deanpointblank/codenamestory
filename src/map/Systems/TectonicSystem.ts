@@ -5,7 +5,6 @@ import {
 	PlateMovement,
 	PlateBoundary,
 } from "../mapTypes";
-// import { noise2D } from "../utils/noise";
 import { createNoise2D, NoiseFunction2D } from "simplex-noise";
 
 export class TectonicSystem {
@@ -19,6 +18,10 @@ export class TectonicSystem {
 		this.noise2D = createNoise2D();
 		this.initializePlates(numPlates);
 		this.identifyBoundaries();
+	}
+
+	public getPoints(): MapPoint[] {
+		return this.points;
 	}
 
 	private initializePlates(numPlates: number): void {
@@ -188,6 +191,14 @@ export class TectonicSystem {
 		this.boundaries.forEach((boundary) => {
 			this.applyBoundaryEffects(boundary);
 		});
+
+		// Log elevation range after updates
+		const elevations = this.points.map((p) => p.elevation || 0);
+		console.log("Elevation range:", {
+			min: Math.min(...elevations),
+			max: Math.max(...elevations),
+			avg: elevations.reduce((a, b) => a + b) / elevations.length,
+		});
 	}
 
 	private applyBoundaryEffects(boundary: PlateBoundary): void {
@@ -196,6 +207,7 @@ export class TectonicSystem {
 
 		boundary.points.forEach((pointIndex) => {
 			const point = this.points[pointIndex];
+			point.elevation = point.elevation || 0;
 
 			switch (boundary.type) {
 				case PlateMovement.CONVERGENT:

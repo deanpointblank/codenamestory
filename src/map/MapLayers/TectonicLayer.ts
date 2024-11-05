@@ -28,22 +28,27 @@ export class TectonicLayer implements MapLayer {
 			ctx.beginPath();
 
 			// Style based on boundary type
+			// Enhanced boundary styles
 			switch (boundary.type) {
 				case PlateMovement.CONVERGENT:
-					ctx.strokeStyle = "#FF0000";
-					ctx.lineWidth = 2;
+					ctx.strokeStyle = "#ff4d4d"; // Bright red
+					ctx.lineWidth = 2.5;
+					ctx.setLineDash([]);
 					break;
 				case PlateMovement.DIVERGENT:
-					ctx.strokeStyle = "#00FF00";
-					ctx.lineWidth = 2;
+					ctx.strokeStyle = "#4dff4d"; // Bright green
+					ctx.lineWidth = 2.5;
+					ctx.setLineDash([]);
 					break;
 				case PlateMovement.TRANSFORM:
-					ctx.strokeStyle = "#0000FF";
-					ctx.lineWidth = 1;
+					ctx.strokeStyle = "#4d4dff"; // Bright blue
+					ctx.lineWidth = 2;
+					ctx.setLineDash([5, 5]); // Dashed line for transform faults
 					break;
 			}
 
 			// Draw boundary lines
+			// After the main boundary stroke, add this:
 			boundary.points.forEach((pointIndex, i) => {
 				const point = points[pointIndex];
 				if (i === 0) {
@@ -53,6 +58,12 @@ export class TectonicLayer implements MapLayer {
 				}
 			});
 
+			// Draw main colored line
+			ctx.stroke();
+
+			// Add white outline for contrast
+			ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+			ctx.lineWidth += 1; // Slightly wider for outline
 			ctx.stroke();
 		});
 
@@ -64,9 +75,24 @@ export class TectonicLayer implements MapLayer {
 					plate.points,
 					points,
 				);
-				ctx.fillStyle = "#000";
+
+				// Simple white background for contrast
+				const text = `Plate ${plate.id}`;
 				ctx.font = "12px Arial";
-				ctx.fillText(`Plate ${plate.id}`, centerPoint.x, centerPoint.y);
+				const metrics = ctx.measureText(text);
+
+				// Add a small white rectangle behind the text
+				ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+				ctx.fillRect(
+					centerPoint.x - metrics.width / 2,
+					centerPoint.y - 6,
+					metrics.width,
+					12,
+				);
+
+				// Draw the text
+				ctx.fillStyle = "#000";
+				ctx.fillText(text, centerPoint.x, centerPoint.y);
 			}
 		});
 	}

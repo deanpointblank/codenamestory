@@ -9,13 +9,6 @@ interface VoronoiLayerConfig {
 export class VoronoiLayer implements MapLayer {
 	id = "voronoi";
 	isVisible = true;
-	private strokeStyle: string = "#666";
-	private lineWidth: number = 0.5;
-
-	configure(config: VoronoiLayerConfig) {
-		if (config.strokeStyle) this.strokeStyle = config.strokeStyle;
-		if (config.lineWidth) this.lineWidth = config.lineWidth;
-	}
 
 	render(
 		ctx: CanvasRenderingContext2D,
@@ -30,8 +23,8 @@ export class VoronoiLayer implements MapLayer {
 		);
 		const voronoi = delaunay.voronoi([0, 0, width, height]);
 
-		ctx.strokeStyle = this.strokeStyle;
-		ctx.lineWidth = this.lineWidth;
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.2)"; // Very subtle white lines
+		ctx.lineWidth = 0.5;
 
 		for (let i = 0; i < points.length; i++) {
 			const cell = voronoi.cellPolygon(i);
